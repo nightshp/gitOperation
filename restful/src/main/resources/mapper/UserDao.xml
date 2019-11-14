@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.restful.dao.UserDao">
+    <resultMap id="BaseResultMap" type="com.example.restful.bean.User">
+        <id column="uid" jdbcType="INTEGER" property="uId"/>
+        <result column="upassword" jdbcType="VARCHAR" property="uPassword"/>
+        <result column="uname" jdbcType="VARCHAR" property="uName"/>
+    </resultMap>
+    <insert id="insertUserInfo" parameterType="com.example.restful.bean.User">
+        insert into user(uname,upassword) values ( #{uName,jdbcType=VARCHAR},#{uPassword,jdbcType=VARCHAR});
+        <!--<trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uName != null and uName!=''">
+                uname,
+            </if>
+            <if test="uPassword != null and uPassword != ''">
+                upassword
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uName != null and uName!=''">
+                #{uName,jdbcType=VARCHAR},
+            </if>
+            <if test="uPassword != null and uPassword != ''">
+                #{uPassword,jdbcType=VARCHAR}
+            </if>
+        </trim>-->
+    </insert>
+
+    <select id="selectAll" statementType="CALLABLE" useCache="false" resultType="com.example.restful.bean.User">
+        call SelectAll();
+    </select>
+
+    <select id="selectById" resultType="com.example.restful.bean.User">
+        select uname,upassword from user where uid=#{uId,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from user where uid=#{uId,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateById" parameterType="com.example.restful.bean.User">
+        update user
+        <set>
+            <if test="uName !='' and uName != null">
+                uname=#{uName,jdbcType=VARCHAR},
+            </if>
+            <if test="uPassword !='' and uPassword!= null">
+                upassword=#{uPassword,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where uid=#{uId,jdbcType=INTEGER}
+    </update>
+</mapper>
